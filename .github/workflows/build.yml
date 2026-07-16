@@ -59,7 +59,7 @@ jobs:
           scan-type: fs
           scan-ref: .
           format: sarif
-          output: trivy-results.sarif
+          output: trivy-fs-results.sarif
           exit-code: 0
           severity: HIGH,CRITICAL
 
@@ -92,7 +92,7 @@ jobs:
       - name: Upload Trivy Results to GitHub Security
         uses: github/codeql-action/upload-sarif@v3
         with:
-          sarif_file: trivy-results.sarif
+          sarif_file: trivy-fs-results.sarif
 
       - name: Install Cosign
         uses: sigstore/cosign-installer@v3
