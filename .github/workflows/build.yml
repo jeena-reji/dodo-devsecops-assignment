@@ -18,6 +18,7 @@ permissions:
   packages: write
   security-events: write
   id-token: write
+  attestations: write
 
 env:
   IMAGE_NAME: ledger-api
@@ -68,6 +69,7 @@ jobs:
         uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: trivy-fs-results.sarif
+          category: trivy-filesystem
 
       - name: Log in to GitHub Container Registry
         uses: docker/login-action@v3
@@ -92,7 +94,8 @@ jobs:
       - name: Upload Trivy Results to GitHub Security
         uses: github/codeql-action/upload-sarif@v3
         with:
-          sarif_file: trivy-fs-results.sarif
+          sarif_file: trivy-image-results.sarif
+          category: trivy-image
 
       - name: Install Cosign
         uses: sigstore/cosign-installer@v3
