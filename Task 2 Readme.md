@@ -2,155 +2,312 @@
 
 ## Objective
 
-The objective of this task is to build a secure CI/CD pipeline build.yaml that performs automated security checks, builds a container image, signs the image, and prepares it for deployment using GitOps principles.
+The objective of this task is to implement a secure CI/CD pipeline build.yml using GitHub Actions that automates application security validation, container image creation, vulnerability scanning, image signing, and software supply chain attestation.
 
-The pipeline is implemented using GitHub Actions and integrates multiple DevSecOps tools to improve software supply chain security.
+The pipeline follows DevSecOps and shift-left security principles by integrating security checks throughout the software delivery lifecycle.
 
 ---
 
 # Pipeline Architecture
 
 ```
-Developer Push
-        |
-        v
-GitHub Actions
-        |
-        +----------------------+
-        | Checkout Repository  |
-        +----------------------+
-                    |
-                    v
-           Install Dependencies
-                    |
-                    v
-              Semgrep (SAST)
-                    |
-                    v
-         Gitleaks (Secret Scan)
-                    |
-                    v
-       Trivy Filesystem Scan
-                    |
-                    v
-          Build Docker Image
-                    |
-                    v
-          Trivy Image Scan
-                    |
-                    v
-            Push Image to GHCR
-                    |
-                    v
-            Cosign Image Signing
-                    |
-                    v
-         SLSA Provenance Generation
-                    |
-                    v
-       ArgoCD Deployment (Bonus)
+Developer Push / Pull Request
+            |
+            v
+     GitHub Actions Workflow
+            |
+            v
++---------------------------+
+| Checkout Repository       |
++---------------------------+
+            |
+            v
++---------------------------+
+| Install Dependencies      |
++---------------------------+
+            |
+            v
++---------------------------+
+| Semgrep SAST Scan         |
++---------------------------+
+            |
+            v
++---------------------------+
+| Gitleaks Secret Scan      |
++---------------------------+
+            |
+            v
++---------------------------+
+| Trivy Filesystem Scan     |
++---------------------------+
+            |
+            v
++---------------------------+
+| Build Docker Image        |
++---------------------------+
+            |
+            v
++---------------------------+
+| Trivy Container Scan      |
++---------------------------+
+            |
+            v
++---------------------------+
+| Push Image to GHCR        |
++---------------------------+
+            |
+            v
++---------------------------+
+| Cosign Image Signing      |
++---------------------------+
+            |
+            v
++---------------------------+
+| SLSA Provenance           |
+| Generation                |
++---------------------------+
+            |
+            v
++---------------------------+
+| GitOps Deployment Trigger |
+| (ArgoCD - Bonus)          |
++---------------------------+
 ```
 
 ---
 
-# Security Controls
+# Technology Stack
 
 | Tool | Purpose |
 |------|---------|
-| GitHub Actions | CI/CD automation |
+| GitHub Actions | CI/CD workflow automation |
 | Semgrep | Static Application Security Testing (SAST) |
-| Gitleaks | Detects hardcoded secrets |
+| Gitleaks | Secret and credential detection |
 | Trivy | Filesystem and container vulnerability scanning |
+| Docker | Container image creation |
 | GHCR | Container image registry |
 | Cosign | Container image signing |
-| SLSA Provenance | Supply chain attestation |
-| ArgoCD | GitOps-based deployment (bonus) |
+| SLSA | Software supply chain provenance |
+| ArgoCD | GitOps deployment automation |
 
 ---
 
-# Pipeline Stages
+# Pipeline Workflow
 
-## Checkout
+## 1. Repository Checkout
 
-Retrieves the latest source code from the repository.
+The workflow starts by retrieving the latest source code from the GitHub repository.
 
-## Dependency Installation
+Action used:
 
-Installs Python dependencies required by the application.
+```
+actions/checkout
+```
 
-## Semgrep Scan
+---
 
-Performs static code analysis to detect insecure coding patterns and common security vulnerabilities.
+## 2. Dependency Installation
 
-## Gitleaks Scan
+Python dependencies required by the application are installed before security validation.
 
-Scans the repository for hardcoded credentials, API keys, passwords, and other secrets.
+Example:
 
-## Trivy Filesystem Scan
+```
+pip install -r app/requirements.txt
+```
 
-Scans the project files for known vulnerabilities and security misconfigurations before building the container image.
+---
 
-## Docker Build
+## 3. Semgrep SAST Scan
 
-Builds the application container image.
+Semgrep performs static application security testing by analyzing source code for:
 
-## Trivy Image Scan
+- Security vulnerabilities
+- Unsafe coding patterns
+- Common programming mistakes
 
-Scans the built container image for operating system and package vulnerabilities.
+This helps identify issues before application deployment.
 
-## Container Registry
+---
 
-Pushes the validated container image to GitHub Container Registry (GHCR).
+## 4. Gitleaks Secret Detection
 
-## Cosign Signing
+Gitleaks scans the repository for exposed sensitive information such as:
 
-Signs the container image to provide integrity and authenticity verification.
+- Passwords
+- API keys
+- Tokens
+- Credentials
 
-## SLSA Provenance
+A Gitleaks configuration file is used to manage allowed files and prevent false positives.
 
-Generates build provenance to improve software supply chain transparency.
+---
 
-**Note:** In a production environment, the attestation would use the image digest produced after the image is pushed to the container registry.
+## 5. Trivy Filesystem Security Scan
 
-## ArgoCD
+Trivy scans the application source code and dependencies for:
 
-Represents the GitOps deployment stage. In a production environment, this step would invoke the ArgoCD API or CLI to synchronize the application after a successful build.
+- Known CVE vulnerabilities
+- Vulnerable packages
+- Security issues
+
+The scan results are uploaded to GitHub Security using SARIF format.
+
+---
+
+## 6. Docker Image Build
+
+After successful security checks, the application container image is created.
+
+Example image:
+
+```
+ghcr.io/<organization>/ledger-api:v1
+```
+
+---
+
+## 7. Trivy Container Image Scan
+
+The generated Docker image is scanned for vulnerabilities including:
+
+- OS package vulnerabilities
+- Application dependency vulnerabilities
+- Critical and high severity issues
+
+Results are uploaded to GitHub Code Scanning.
+
+---
+
+## 8. Push Image to GitHub Container Registry
+
+After validation, the container image is pushed to GHCR.
+
+Registry:
+
+```
+ghcr.io
+```
+
+The workflow authenticates using GitHub Actions token.
+
+---
+
+## 9. Container Image Signing using Cosign
+
+Cosign is used to sign the container image.
+
+Purpose:
+
+- Verify image authenticity
+- Prevent image tampering
+- Improve software supply chain security
+
+---
+
+## 10. SLSA Provenance Generation
+
+The pipeline generates SLSA build provenance for the container image.
+
+The attestation contains:
+
+- Build information
+- Source repository details
+- Workflow information
+- Image digest
+
+The provenance is generated after pushing the image and uses the generated image digest.
+
+---
+
+## 11. GitOps Deployment Trigger
+
+The pipeline includes an ArgoCD deployment stage.
+
+In a production environment:
+
+- The workflow would call ArgoCD CLI/API
+- ArgoCD would synchronize Kubernetes manifests
+- The application would be deployed automatically
+
+---
+
+# Security Reports
+
+The pipeline generates security reports for:
+
+- Semgrep SAST analysis
+- Gitleaks secret detection
+- Trivy filesystem scanning
+- Trivy container image scanning
+
+Reports are uploaded to GitHub Security through SARIF integration.
+
+---
+
+# Security Implementation Highlights
+
+The pipeline implements:
+
+✅ Shift-left security approach  
+✅ Automated source code security scanning  
+✅ Secret detection before deployment  
+✅ Dependency vulnerability scanning  
+✅ Container vulnerability scanning  
+✅ Secure image publishing  
+✅ Container image signing  
+✅ Supply chain attestation  
+✅ GitOps deployment readiness  
 
 ---
 
 # Validation
 
-The pipeline was validated using GitHub Actions workflow execution.
+The pipeline was successfully validated using GitHub Actions.
 
-Security reports include:
+Successful execution includes:
 
-- Semgrep findings
-- Gitleaks findings
-- Trivy vulnerability scan
-- Container image scan
-- Cosign image signature
-- SLSA provenance generation
+```
+✓ Semgrep Scan
+✓ Gitleaks Scan
+✓ Trivy Filesystem Scan
+✓ Docker Image Build
+✓ Trivy Image Scan
+✓ GHCR Image Push
+✓ Cosign Image Signing
+✓ SLSA Provenance Generation
+✓ GitOps Deployment Trigger
+```
 
 ---
 
 # Design Decisions
 
-The pipeline follows a shift-left security approach by performing security checks before deployment.
+The following design decisions were implemented:
 
-Key design decisions include:
-
-- Automated static application security testing
-- Automated secret detection
-- Vulnerability scanning before and after image creation
-- Container image signing
-- Supply chain provenance generation
-- GitOps deployment approach
+- Security checks are performed before container deployment.
+- Vulnerability scanning is included at both source and image levels.
+- Container images are signed before deployment.
+- SLSA provenance improves software supply chain visibility.
+- SARIF reports integrate security findings into GitHub Security.
 
 ---
 
 # Future Improvements
 
-- Capture the Docker image digest automatically for SLSA attestations.
-- Upload security reports to centralized dashboards.
-- Integrate policy enforcement using OPA or Kyverno.
-- Configure automatic ArgoCD synchronization with deployment manifests.
+Possible enhancements:
+
+- Implement automatic vulnerability remediation workflows.
+- Add Kubernetes admission policies using Kyverno or OPA Gatekeeper.
+- Enable automatic ArgoCD synchronization.
+- Add runtime security monitoring.
+- Integrate security dashboards for centralized reporting.
+- Implement image verification before Kubernetes deployment.
+
+---
+
+# Conclusion
+
+This DevSecOps pipeline provides a secure automated delivery workflow by combining CI/CD automation with security controls throughout the software lifecycle.
+
+The implementation improves code security, container security, and software supply chain integrity while maintaining deployment automation using GitOps principles.
