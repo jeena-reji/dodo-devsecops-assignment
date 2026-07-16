@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: ledger-api
+  namespace: ledger
+
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: ledger-api
+
+  template:
+
+    metadata:
+      labels:
+        app: ledger-api
+
+    spec:
+
+      serviceAccountName: ledger-api-sa
+
+      imagePullSecrets:
+      - name: ghcr-secret
+
+      containers:
+
+      - name: ledger-api
+
+        image: ghcr.io/jeena-reji/ledger-api:sha256-469a4d789e2a4ac2ac697acca4ab7c704304e999bb7aea6f16f9bb7bdf2226b9
+
+        ports:
+        - containerPort: 8000

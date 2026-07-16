@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: allowed-client
+  namespace: ledger
+  labels:
+    app: allowed-client
+spec:
+  serviceAccountName: default
+  containers:
+  - name: curl
+    image: curlimages/curl
+    command:
+    - sleep
+    - "3600"

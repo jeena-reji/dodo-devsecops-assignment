@@ -10,9 +10,9 @@ spec:
     - name: require-non-root
       match:
         any:
-        - resources:
-            kinds:
-            - Pod
+          - resources:
+              kinds:
+                - Pod
       validate:
         message: "Containers must not run as root."
         pattern:
@@ -23,16 +23,12 @@ spec:
     - name: disallow-latest-tag
       match:
         any:
-        - resources:
-            kinds:
-            - Pod
+          - resources:
+              kinds:
+                - Pod
       validate:
-        message: "Using latest tag is not allowed."
-        foreach:
-        - list: "request.object.spec.containers"
-          deny:
-            conditions:
-              any:
-              - key: "{{ element.image }}"
-                operator: EndsWith
-                value: ":latest"
+        message: "Using the 'latest' image tag is not allowed."
+        pattern:
+          spec:
+            containers:
+              - image: "!*:latest"
