@@ -46,13 +46,12 @@ jobs:
         uses: semgrep/semgrep-action@v1
         with:
           config: auto
-
+          
       - name: Run Gitleaks
         uses: gitleaks/gitleaks-action@v2
-        with:
-           config-path: .gitleaks.toml
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITLEAKS_CONFIG: .gitleaks.toml
 
       - name: Run Trivy Filesystem Scan
         uses: aquasecurity/trivy-action@master
