@@ -1,0 +1,5 @@
+[allowlist]
+description = "Ignore Kubernetes sealed secrets"
+paths = [
+  '''deploy/sealed-secret\.yaml'''
+]
