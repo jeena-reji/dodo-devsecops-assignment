@@ -281,6 +281,13 @@ Successful execution includes:
 
 ---
 
+<img width="901" height="857" alt="image" src="https://github.com/user-attachments/assets/1dd0d842-4128-4447-bb33-2069c6d0e4f2" />
+
+https://github.com/jeena-reji/dodo-devsecops-assignment/actions/runs/29478315732
+
+https://github.com/jeena-reji/dodo-devsecops-assignment/pkgs/container/ledger-api
+
+
 # Design Decisions
 
 The following design decisions were implemented:
