@@ -2,7 +2,7 @@
 
 ## Objective
 
-The objective of this task is to build a secure CI/CD pipeline that performs automated security checks, builds a container image, signs the image, and prepares it for deployment using GitOps principles.
+The objective of this task is to build a secure CI/CD pipeline build.yaml that performs automated security checks, builds a container image, signs the image, and prepares it for deployment using GitOps principles.
 
 The pipeline is implemented using GitHub Actions and integrates multiple DevSecOps tools to improve software supply chain security.
 
