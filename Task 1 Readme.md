@@ -166,15 +166,16 @@ kubectl get clusterpolicy
 
 The following screenshots are included as proof of implementation.
 
-- Running Pods
-- Services
-- Ingress
-- Sealed Secret
-- Deployment
-- Kyverno Policy
-- Resource Limits
-- GitHub Repository
-
+- Running pods-https://github.com/jeena-reji/dodo-devsecops-assignment/blob/main/screenshots/running%20pods.png
+- Services-https://github.com/jeena-reji/dodo-devsecops-assignment/blob/main/screenshots/services.png
+- Sealed Secret-https://github.com/jeena-reji/dodo-devsecops-assignment/blob/main/screenshots/sealed%20secret.png
+- Deployment-https://github.com/jeena-reji/dodo-devsecops-assignment/blob/main/screenshots/deployment.png
+- Kyverno Policy-https://github.com/jeena-reji/dodo-devsecops-assignment/blob/main/screenshots/kyverno.png
+- configmap-https://github.com/jeena-reji/dodo-devsecops-assignment/blob/main/screenshots/configmap.png
+- rbac and rolebinding-https://github.com/jeena-reji/dodo-devsecops-assignment/blob/main/screenshots/rbac%20%26%20rolebinding.png
+- secret created from sealed secret-https://github.com/jeena-reji/dodo-devsecops-assignment/blob/main/screenshots/secret%20created%20from%20sealed%20secret.png
+- security context-https://github.com/jeena-reji/dodo-devsecops-assignment/blob/main/screenshots/security%20context.png
+- service account - https://github.com/jeena-reji/dodo-devsecops-assignment/blob/main/screenshots/service%20account.png
 ---
 
 # Design Decisions
