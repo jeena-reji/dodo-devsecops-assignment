@@ -89,12 +89,6 @@ Expected:
 client version: 1.28.10
 ```
 
-## Screenshot
-
-> Add screenshot:
->
-> `screenshots/01-istio-version.png`
-
 ---
 
 # 2. Enable Istio Injection
@@ -115,11 +109,7 @@ ledger Active istio-injection=enabled
 
 ## Screenshot
 
-> Add screenshot:
->
-> `screenshots/02-namespace-injection.png`
 
----
 
 # 3. Workloads Added to Mesh
 
@@ -147,11 +137,6 @@ The `2/2` status confirms:
 
 are running.
 
-## Screenshot
-
-> Add screenshot:
->
-> `screenshots/03-istio-sidecars-running.png`
 
 ---
 
@@ -177,12 +162,6 @@ STRICT mode ensures:
 - All workload-to-workload communication requires mTLS
 - Plaintext traffic is rejected
 - Workload identity is verified using certificates
-
-## Screenshot
-
-> Add screenshot:
->
-> `screenshots/04-mtls-strict.png`
 
 ---
 
@@ -297,11 +276,7 @@ Result:
 ✅ Unauthorized workload blocked
 
 
-## Screenshot
 
-> Add screenshot:
->
-> `screenshots/05-unauthorized-blocked.png`
 
 ---
 
@@ -327,12 +302,6 @@ Result:
 
 ✅ Authorized workload allowed
 
-
-## Screenshot
-
-> Add screenshot:
->
-> `screenshots/06-authorized-success.png`
 
 ---
 
@@ -371,12 +340,6 @@ Verification:
 ```bash
 kubectl get networkpolicy -n ledger
 ```
-
-## Screenshot
-
-> Add screenshot:
->
-> `screenshots/07-network-policy.png`
 
 ---
 
